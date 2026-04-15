@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SurePath NEMT Application — Purpose-Built NEMT Operations Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0a1628;
+      --navy-mid: #112040;
+      --teal: #0d7a6b;
+      --teal-light: #13a88f;
+      --gold: #c8963e;
+      --gold-light: #e3b05a;
+      --cream: #f5f0e8;
+      --warm-white: #faf8f4;
+      --text-dark: #1a1a2e;
+      --text-mid: #4a5568;
+      --text-light: #718096;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,22,40,0.97);
+      backdrop-filter: blur(12px);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px;
+      border-bottom: 1px solid rgba(200,150,62,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-badge {
+      background: rgba(13,122,107,0.2);
+      border: 1px solid var(--teal);
+      color: var(--teal-light);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+      margin-left: 0.8rem;
+      vertical-align: middle;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a {
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-back {
+      color: rgba(245,240,232,0.5) !important;
+      font-size: 0.82rem !important;
+    }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--navy) !important;
+      padding: 0.55rem 1.4rem !important;
+      border-radius: 4px !important;
+      text-transform: uppercase !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.06em !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center;
+      padding: 120px 5% 80px;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 40%, rgba(13,122,107,0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 50% at 15% 70%, rgba(200,150,62,0.07) 0%, transparent 50%);
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.035;
+      background-image:
+        linear-gradient(rgba(245,240,232,1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,240,232,1) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    .hero-left-accent {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: linear-gradient(to bottom, transparent 0%, var(--teal) 40%, var(--gold) 80%, transparent 100%);
+    }
+
+    .hero-layout {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 1.3rem;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 28px; height: 2px;
+      background: var(--teal-light);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.12;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(245,240,232,0.7);
+      line-height: 1.78;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-teal {
+      background: var(--teal);
+      color: white;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-teal:hover { background: var(--teal-light); transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 1.5px solid rgba(245,240,232,0.2);
+      color: rgba(245,240,232,0.7);
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: rgba(245,240,232,0.5); color: var(--cream); transform: translateY(-2px); }
+
+    /* DASHBOARD MOCKUP */
+    .dashboard-mock {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.4);
+    }
+
+    .dash-topbar {
+      background: rgba(255,255,255,0.06);
+      padding: 0.9rem 1.4rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dash-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dash-title {
+      margin-left: auto;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    .dash-body { padding: 1.5rem; }
+
+    .dash-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem; margin-bottom: 1.2rem;
+    }
+
+    .dash-stat {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .dash-stat-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 0.4rem;
+    }
+    .dash-stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+    .dash-stat-sub {
+      font-size: 0.68rem;
+      margin-top: 0.3rem;
+    }
+    .pos { color: #4ade80; }
+    .warn { color: var(--gold-light); }
+
+    .dash-table-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.7rem;
+      padding: 0 0.2rem;
+    }
+    .dash-table-title {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+    .dash-live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+      display: inline-block; margin-right: 0.4rem;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .dash-trip-row {
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 0.5rem;
+      display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr;
+      gap: 0.5rem; align-items: center;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .trip-id { font-size: 0.8rem; font-weight: 600; color: var(--cream); }
+    .trip-dest { font-size: 0.75rem; color: rgba(245,240,232,0.5); }
+    .trip-driver { font-size: 0.75rem; color: rgba(245,240,232,0.6); }
+    .trip-status {
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem;
+      border-radius: 100px; letter-spacing: 0.05em; text-align: center;
+    }
+    .s-active { background: rgba(13,122,107,0.25); color: #4ade80; }
+    .s-enroute { background: rgba(200,150,62,0.2); color: var(--gold-light); }
+    .s-complete { background: rgba(255,255,255,0.08); color: rgba(245,240,232,0.5); }
+
+    /* SECTIONS */
+    section { padding: 100px 5%; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .section-label::before {
+      content: ''; display: block; width: 24px; height: 2px;
+      background: var(--teal);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.75;
+      max-width: 600px;
+    }
+
+    /* FEATURES TABS */
+    .features-section { background: var(--cream); }
+    .features-header { margin-bottom: 3.5rem; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2.2rem;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-card-icon {
+      font-size: 2rem; margin-bottom: 1rem;
+    }
+    .feature-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.8rem;
+    }
+    .feature-card-desc {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .feature-bullets {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .feature-bullets li {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .feature-bullets li::before {
+      content: '→';
+      color: var(--teal);
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    /* METRICS */
+    .metrics-section {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+    .metrics-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(13,122,107,0.12) 0%, transparent 60%);
+    }
+    .metrics-inner { position: relative; z-index: 2; }
+
+    .metrics-header { margin-bottom: 4rem; }
+    .metrics-header .section-title { color: var(--cream); }
+    .metrics-header .section-sub { color: rgba(245,240,232,0.6); }
+    .metrics-header .section-label { color: var(--gold); }
+    .metrics-header .section-label::before { background: var(--gold); }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .metric-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .metric-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .metric-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.4;
+    }
+
+    /* PRICING */
+    .pricing-section { background: var(--warm-white); }
+    .pricing-header { margin-bottom: 3.5rem; text-align: center; }
+    .pricing-header .section-label { justify-content: center; }
+    .pricing-header .section-sub { margin: 0 auto; text-align: center; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 2.4rem;
+      position: relative;
+    }
+
+    .pricing-card.featured-plan {
+      background: var(--navy);
+      border-color: var(--teal);
+      transform: scale(1.04);
+    }
+
+    .plan-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--teal);
+      color: white;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 1rem; border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.8rem;
+    }
+    .featured-plan .plan-name { color: var(--teal-light); }
+
+    .plan-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .featured-plan .plan-price { color: var(--cream); }
+    .plan-period {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+    .featured-plan .plan-period { color: rgba(245,240,232,0.5); }
+
+    .plan-divider {
+      height: 1px;
+      background: rgba(0,0,0,0.07);
+      margin-bottom: 1.5rem;
+    }
+    .featured-plan .plan-divider { background: rgba(255,255,255,0.1); }
+
+    .plan-features {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.7rem;
+      margin-bottom: 2rem;
+    }
+    .plan-features li {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      display: flex; align-items: flex-start; gap: 0.6rem;
+    }
+    .featured-plan .plan-features li { color: rgba(245,240,232,0.75); }
+
+    .plan-check { color: var(--teal); flex-shrink: 0; font-weight: 700; }
+
+    .plan-cta {
+      display: block;
+      text-align: center;
+      padding: 0.85rem;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+    }
+    .plan-cta-outline {
+      border: 1.5px solid var(--teal);
+      color: var(--teal);
+    }
+    .plan-cta-outline:hover { background: var(--teal); color: white; }
+    .plan-cta-solid {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    .plan-cta-solid:hover { background: var(--gold-light); }
+
+    /* DEMO CTA */
+    .demo-section {
+      background: linear-gradient(135deg, var(--teal) 0%, #0a5a4e 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .demo-section > * { position: relative; z-index: 2; }
+
+    .demo-section .section-label { color: rgba(255,255,255,0.7); justify-content: center; }
+    .demo-section .section-label::before { background: rgba(255,255,255,0.4); }
+    .demo-section .section-title { color: white; margin-bottom: 1rem; }
+    .demo-section .section-sub { color: rgba(255,255,255,0.75); margin: 0 auto 2.5rem; text-align: center; }
+
+    .demo-form {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .demo-input {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      min-width: 240px;
+      outline: none;
+    }
+    .demo-input::placeholder { color: rgba(255,255,255,0.6); }
+    .demo-input:focus { border-color: white; background: rgba(255,255,255,0.2); }
+
+    /* FOOTER */
+    footer {
+      background: #060e1c;
+      padding: 50px 5% 28px;
+    }
+
+    .footer-simple {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-nav { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .footer-nav a {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.45);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--cream); }
+
+    .footer-bottom-simple {
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom-simple p {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.3);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+    .hero h1 { animation: fadeUp 0.6s 0.1s ease both; }
+    .hero-sub { animation: fadeUp 0.6s 0.2s ease both; }
+    .hero-actions { animation: fadeUp 0.6s 0.3s ease both; }
+    .dashboard-mock { animation: fadeUp 0.8s 0.2s ease both; }
+
+    @media (max-width: 960px) {
+      .hero-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .pricing-card.featured-plan { transform: none; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .dash-stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Sure<span>Path</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-back">← Back to SurePath</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#demo" class="nav-cta">Request Demo</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-left-accent"></div>
+    <div class="hero-layout">
+      <div>
+        <div class="hero-eyebrow">SurePath Technology Platform</div>
+        <h1>NEMT Operations,<br><em>Unified.</em></h1>
+        <p class="hero-sub">
+          The SurePath NEMT Application is a purpose-built dispatch, billing, compliance, and analytics platform designed exclusively for non-emergency medical transportation operators. Everything you need to run a profitable, compliant NEMT operation — in one place.
+        </p>
+        <div class="hero-actions">
+          <a href="#demo" class="btn-gold">Request a Demo</a>
+          <a href="#features" class="btn-ghost">Explore Features</a>
+        </div>
+      </div>
+      <div>
+        <div class="dashboard-mock">
+          <div class="dash-topbar">
+            <div class="dash-dot" style="background:#ff5f57"></div>
+            <div class="dash-dot" style="background:#febc2e"></div>
+            <div class="dash-dot" style="background:#28c840"></div>
+            <div class="dash-title">SurePath NEMT · Operations Dashboard</div>
+          </div>
+          <div class="dash-body">
+            <div class="dash-stats-row">
+              <div class="dash-stat">
+                <div class="dash-stat-label">Active Trips</div>
+                <div class="dash-stat-val">48</div>
+                <div class="dash-stat-sub pos">↑ 6 vs. yesterday</div>
+              </div>
+              <div class="dash-stat">
+                <div class="dash-stat-label">Clean Claims</div>
+                <div class="dash-stat-val">98.7%</div>
+                <div class="dash-stat-sub pos">↑ 2.1%</div>
+              </div>
+              <div class="dash-stat">
+                <div class="dash-stat-label">Revenue MTD</div>
+                <div class="dash-stat-val" style="font-size:1.2rem">$142.8K</div>
+                <div class="dash-stat-sub pos">↑ 12%</div>
+              </div>
+            </div>
+            <div class="dash-table-header">
+              <span class="dash-table-title"><span class="dash-live-dot"></span>Live Trips</span>
+              <span style="font-size:0.72rem;color:rgba(245,240,232,0.3)">Updated just now</span>
+            </div>
+            <div class="dash-trip-row">
+              <span class="trip-id">SP-2241 <span class="trip-dest">→ Dialysis Center</span></span>
+              <span class="trip-driver">Driver: M. Johnson</span>
+              <span></span>
+              <span class="trip-status s-active">In Transit</span>
+            </div>
+            <div class="dash-trip-row">
+              <span class="trip-id">SP-2242 <span class="trip-dest">→ Heart Clinic</span></span>
+              <span class="trip-driver">Driver: R. Torres</span>
+              <span></span>
+              <span class="trip-status s-enroute">En Route</span>
+            </div>
+            <div class="dash-trip-row">
+              <span class="trip-id">SP-2240 <span class="trip-dest">→ Memorial Hosp.</span></span>
+              <span class="trip-driver">Driver: D. Kim</span>
+              <span></span>
+              <span class="trip-status s-complete">Completed</span>
+            </div>
+            <div class="dash-trip-row">
+              <span class="trip-id">SP-2243 <span class="trip-dest">→ Rehab Center</span></span>
+              <span class="trip-driver">Driver: A. Patel</span>
+              <span></span>
+              <span class="trip-status s-enroute">En Route</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="features-header">
+      <div class="section-label">Platform Features</div>
+      <h2 class="section-title">Every Tool Your Operation Needs</h2>
+      <p class="section-sub">Built by NEMT industry veterans who understand the unique complexity of coordinating trips, managing compliance, and maximizing reimbursement at scale.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-card-icon">🗺️</div>
+        <div class="feature-card-title">Dispatch & Trip Management</div>
+        <p class="feature-card-desc">Real-time dispatching with intelligent driver assignment, GPS tracking, and automated status updates for every trip in your fleet.</p>
+        <ul class="feature-bullets">
+          <li>Drag-and-drop scheduling board</li>
+          <li>Live GPS with ETAs and geofencing alerts</li>
+          <li>Automated trip confirmation and reminders</li>
+          <li>Ride-share and multi-leg trip support</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">💳</div>
+        <div class="feature-card-title">Billing & Claims Automation</div>
+        <p class="feature-card-desc">Integrated Medicaid, MCO, and broker billing workflows that maximize clean claim rates and accelerate reimbursement cycles.</p>
+        <ul class="feature-bullets">
+          <li>Real-time eligibility verification</li>
+          <li>Auto-claim generation from completed trips</li>
+          <li>ERA/EOB posting and denial management</li>
+          <li>Multi-payer and multi-state support</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">🛡️</div>
+        <div class="feature-card-title">Compliance & Credentialing</div>
+        <p class="feature-card-desc">Automated driver and vehicle credential tracking with expiration alerts, audit-ready documentation, and regulatory compliance monitoring.</p>
+        <ul class="feature-bullets">
+          <li>Driver license, background & DMV tracking</li>
+          <li>Vehicle inspection and insurance expiration alerts</li>
+          <li>ADA compliance documentation</li>
+          <li>Audit-ready trip logs and reporting</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">📊</div>
+        <div class="feature-card-title">Analytics & Reporting</div>
+        <p class="feature-card-desc">Custom dashboards that surface the KPIs that matter — from cost-per-mile and denial trends to driver performance and revenue forecasting.</p>
+        <ul class="feature-bullets">
+          <li>Executive, operational, and financial dashboards</li>
+          <li>Denial trend analysis and root cause reporting</li>
+          <li>Driver efficiency and utilization metrics</li>
+          <li>Scheduled report delivery via email</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">🔗</div>
+        <div class="feature-card-title">Broker & Payer Integrations</div>
+        <p class="feature-card-desc">Pre-built integrations with major NEMT brokers and Medicaid management systems for seamless trip imports, authorization, and claims submission.</p>
+        <ul class="feature-bullets">
+          <li>Modivcare, MTM, LogistiCare connectivity</li>
+          <li>Medicaid MMIS and MCO connections</li>
+          <li>HL7 / FHIR healthcare data interoperability</li>
+          <li>Open API for custom integrations</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">📱</div>
+        <div class="feature-card-title">Driver Mobile App</div>
+        <p class="feature-card-desc">A purpose-built mobile application for drivers that handles navigation, trip manifests, electronic signatures, and real-time communication.</p>
+        <ul class="feature-bullets">
+          <li>iOS and Android support</li>
+          <li>Electronic signature and trip verification</li>
+          <li>In-app messaging and dispatch communication</li>
+          <li>Offline-capable trip management</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section class="metrics-section">
+    <div class="metrics-inner">
+      <div class="metrics-header">
+        <div class="section-label">Results by the Numbers</div>
+        <h2 class="section-title">What SurePath Operators Experience</h2>
+        <p class="section-sub">Average outcomes reported by NEMT operators after 12 months on the SurePath platform.</p>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-num">98.7%</div>
+          <div class="metric-label">Clean Claim Rate</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">32%</div>
+          <div class="metric-label">Reduction in Claim Denials</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">4.2×</div>
+          <div class="metric-label">Faster Reimbursement Cycle</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">18%</div>
+          <div class="metric-label">Avg. Revenue Increase</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-header">
+      <div class="section-label">Plans & Pricing</div>
+      <h2 class="section-title">Transparent, Scalable Pricing</h2>
+      <p class="section-sub">Choose the plan that fits your fleet size and operational complexity. All plans include onboarding support and HIPAA-compliant data security.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$299<span style="font-size:1rem;font-weight:400">/mo</span></div>
+        <div class="plan-period">Up to 5 vehicles · 1 user</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="plan-check">✓</span> Dispatch & trip management</li>
+          <li><span class="plan-check">✓</span> Basic billing workflows</li>
+          <li><span class="plan-check">✓</span> Driver mobile app</li>
+          <li><span class="plan-check">✓</span> Standard reporting</li>
+          <li><span class="plan-check">✓</span> Email support</li>
+        </ul>
+        <a href="#demo" class="plan-cta plan-cta-outline">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured-plan">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Professional</div>
+        <div class="plan-price">$749<span style="font-size:1rem;font-weight:400">/mo</span></div>
+        <div class="plan-period">Up to 25 vehicles · 5 users</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="plan-check">✓</span> Everything in Starter</li>
+          <li><span class="plan-check">✓</span> Full billing automation</li>
+          <li><span class="plan-check">✓</span> Broker integrations</li>
+          <li><span class="plan-check">✓</span> Advanced analytics</li>
+          <li><span class="plan-check">✓</span> Compliance & credentialing</li>
+          <li><span class="plan-check">✓</span> Priority support</li>
+        </ul>
+        <a href="#demo" class="plan-cta plan-cta-solid">Start Free Trial</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-period">Unlimited vehicles & users</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="plan-check">✓</span> Everything in Professional</li>
+          <li><span class="plan-check">✓</span> Multi-state operations</li>
+          <li><span class="plan-check">✓</span> Custom integrations (API)</li>
+          <li><span class="plan-check">✓</span> Dedicated account manager</li>
+          <li><span class="plan-check">✓</span> SLA guarantee</li>
+          <li><span class="plan-check">✓</span> White-label option</li>
+        </ul>
+        <a href="#demo" class="plan-cta plan-cta-outline">Contact Sales</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="demo-section" id="demo">
+    <div class="section-label">See It Live</div>
+    <h2 class="section-title">Request Your Personalized Demo</h2>
+    <p class="section-sub">Our team will walk you through the full SurePath NEMT platform with a live demo tailored to your fleet size and operational needs. No commitment required.</p>
+    <div class="demo-form">
+      <input class="demo-input" type="text" placeholder="Your name" />
+      <input class="demo-input" type="email" placeholder="Work email address" />
+      <input class="demo-input" type="text" placeholder="Company / fleet size" />
+      <a href="mailto:info@surepath.net" class="btn-gold" style="padding: 0.85rem 2rem;">Schedule Demo →</a>
+    </div>
+    <p style="margin-top:1.2rem;font-size:0.8rem;color:rgba(255,255,255,0.5)">Or email us directly at info@surepath.net · We respond within one business day</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-simple">
+      <a href="index.html" class="nav-logo" style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--cream);text-decoration:none;">Sure<span style="color:var(--gold)">Path</span> <span style="font-size:0.8rem;color:var(--teal-light);font-family:'DM Sans',sans-serif;font-weight:500;">NEMT App</span></a>
+      <nav class="footer-nav">
+        <a href="index.html">Back to SurePath.net</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#demo">Request Demo</a>
+        <a href="mailto:info@surepath.net">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom-simple">
+      <p>© 2025 SurePath. All rights reserved. · surepath.net</p>
+      <p>HIPAA Compliant · SOC 2 Type II · CMS Aligned</p>
+    </div>
+  </footer>
+
+</body>
+</html>
